@@ -1,0 +1,32 @@
+package main
+
+import "fmt"
+
+type phoneBook map[string]map[string]int
+
+func main() {
+	var s string
+	myPhoneBook := phoneBook{
+		"John":   {"Home": 9875987656, "Office": 7075987654},
+		"Albert": {"Home": 7675577654, "Office": 9875987654},
+		"Smith":  {"Home": 6875987654, "Office": 8756387654},
+	}
+
+	fmt.Println("Enter name")
+	fmt.Scan(&s)
+	myPhoneBook.search(s)
+
+}
+
+func (b phoneBook) search(s string) {
+	var f int
+	for name, n := range b {
+		if s == name {
+			fmt.Println("The mobile number of ", s, " is,", n)
+			f = 1
+		}
+	}
+	if f == 0 {
+		fmt.Println("The mobile number not found")
+	}
+}
