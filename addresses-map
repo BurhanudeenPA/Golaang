@@ -1,0 +1,48 @@
+package main
+
+import (
+	"fmt"
+)
+
+type address map[string]map[string]map[string]map[string]int
+
+func main() {
+
+	myFriends := address{
+		"John":   {"India": {"Kerala": {"Kochi": 9876657898}}, "America": {"California": {"Los Angeles": 9086659898}}},
+		"Albert": {"America": {"California": {"Los Angeles": 9086659898}}},
+		"Johny":  {"India": {"Maharashtra": {"Mumbai": 7096657898}}},
+	}
+	fmt.Println("Enter name")
+	var s string
+	fmt.Scan(&s)
+	myFriends.search(s)
+
+}
+
+func (b address) search(s string) {
+	var f int
+	for name, a := range b {
+		if s == name {
+			fmt.Println("The address and phno.of ", s, "is")
+			getAddress(a)
+			f = 1
+		}
+	}
+	if f == 0 {
+		fmt.Println("The address not found")
+	}
+}
+
+func getAddress(a map[string]map[string]map[string]int) {
+
+	for k, v := range a {
+		fmt.Println(k)
+		for k, v := range v {
+			fmt.Println(k)
+			for k, v := range v {
+				fmt.Println(k, v)
+			}
+		}
+	}
+}
