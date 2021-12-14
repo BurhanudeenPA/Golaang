@@ -2,10 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"os"
 )
 
 type employee interface{}
+
 type Ceo struct {
 	Name        string
 	Age         int
@@ -55,6 +58,7 @@ func main() {
 
 	saveToFile2("EmployeeDetails.json", employeeData)
 
+	readToStruct("EmployeeDetails.json")
 }
 
 func saveToFile2(f string, e []employee) {
@@ -63,4 +67,18 @@ func saveToFile2(f string, e []employee) {
 	by, _ := json.MarshalIndent(e, "", " ")
 	fs.Write(by)
 
+}
+
+type Employ struct {
+	Name        string `json:"Name"`
+	Age         int    `json:"Age"`
+	Designation string `json:"Designation"`
+	Empid       int    `json:"Empid"`
+}
+
+func readToStruct(f string) {
+	file, _ := ioutil.ReadFile(f)
+	var e []Employ
+	json.Unmarshal(file, &e)
+	fmt.Println(e)
 }
