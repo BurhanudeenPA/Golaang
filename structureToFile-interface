@@ -1,0 +1,66 @@
+package main
+
+import (
+	"encoding/json"
+	"os"
+)
+
+type employee interface{}
+type Ceo struct {
+	Name        string
+	Age         int
+	Designation string
+	Empid       int
+}
+type Manager struct {
+	Name        string
+	Designation string
+	Empid       int
+}
+type TeamLeader struct {
+	Name        string
+	Designation string
+	Empid       int
+}
+type GeneralManager struct {
+	Name        string
+	Designation string
+	Empid       int
+}
+type TeamMember struct {
+	Name        string
+	Designation string
+	Empid       int
+}
+
+func main() {
+	emp1 := Ceo{
+		"Arun",
+		45,
+		"CEO",
+		34,
+	}
+	emp2 := Manager{
+		"Vivek",
+		"Manager",
+		35,
+	}
+	emp3 := TeamLeader{
+		"Alex",
+		"Team Leader",
+		36,
+	}
+
+	employeeData := []employee{emp1, emp2, emp3}
+
+	saveToFile2("EmployeeDetails.json", employeeData)
+
+}
+
+func saveToFile2(f string, e []employee) {
+	os.Remove(f)
+	fs, _ := os.OpenFile(f, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	by, _ := json.MarshalIndent(e, "", " ")
+	fs.Write(by)
+
+}
