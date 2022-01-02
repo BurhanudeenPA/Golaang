@@ -9,11 +9,25 @@ import (
 func main() {
 	var n, m int
 	fmt.Println("Enter the limit")
-	fmt.Scan(&n)
+	for {
+		_, err := fmt.Scanln(&n)
+		if err != nil {
+			fmt.Println("Enter a valid number")
+		} else {
+			break
+		}
+	}
 	ar := make([]int, 0, n)
 	fmt.Println("Enter numbers")
 	for i := 0; i < n; i++ {
-		fmt.Scan(&m)
+		for {
+			_, err := fmt.Scanln(&m)
+			if err != nil {
+				fmt.Println("Enter a valid number")
+			} else {
+				break
+			}
+		}
 		ar = append(ar, m)
 	}
 	c := make(chan int)
