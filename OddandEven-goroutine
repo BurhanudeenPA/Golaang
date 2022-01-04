@@ -10,7 +10,7 @@ func main() {
 	var n, m int
 	fmt.Println("Enter the limit")
 	for {
-		_, err := fmt.Scanln(&n)
+		_, err := fmt.Scan(&n)
 		if err != nil {
 			fmt.Println("Enter a valid number")
 		} else {
@@ -21,7 +21,7 @@ func main() {
 	fmt.Println("Enter numbers")
 	for i := 0; i < n; i++ {
 		for {
-			_, err := fmt.Scanln(&m)
+			_, err := fmt.Scan(&m)
 			if err != nil {
 				fmt.Println("Enter a valid number")
 			} else {
