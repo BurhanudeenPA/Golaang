@@ -1,0 +1,44 @@
+package main
+
+import "fmt"
+
+func main() {
+	var n, m int
+	fmt.Println("Enter the limit")
+	for {
+		_, err := fmt.Scan(&n)
+		if err != nil {
+			fmt.Println("Enter a valid number")
+		} else {
+			break
+		}
+	}
+	ar := make([]int, 0, n)
+	fmt.Println("Enter numbers")
+	for i := 0; i < n; i++ {
+		for {
+			_, err := fmt.Scan(&m)
+			if err != nil {
+				fmt.Println("Enter a valid number")
+			} else {
+				break
+			}
+		}
+		ar = append(ar, m)
+	}
+	fmt.Println("The mean of digits are", mean(ar, n))
+}
+
+func mean(ar []int, n int) []int {
+	br := make([]int, 0, n)
+	for _, a := range ar {
+		s, c := 0, 0
+		for a != 0 {
+			s += a % 10
+			a = a / 10
+			c++
+		}
+		br = append(br, s/c)
+	}
+	return br
+}
