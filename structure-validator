@@ -1,0 +1,129 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
+
+	"github.com/go-playground/validator/v10"
+)
+
+type customer struct {
+	Name     string `validate:"required,alpha"`
+	Fruit    string `validate:"required,gte=3,alpha"`
+	Quantity int    `validate:"gte=1,lte=20"`
+}
+type bill struct {
+	Customer customer
+	Price    int
+}
+
+func main() {
+	var t, name string
+	var c customer
+	validate := validator.New()
+	fmt.Println("Enter customer or owner")
+	for {
+		fmt.Scanln(&t)
+		err := validate.Var(t, "required,oneof=customer|oneof=owner")
+		if err != nil {
+			fmt.Println("Enter a valid user type")
+		} else {
+			break
+		}
+	}
+	if t == "customer" {
+		for {
+			c = getDetails()
+			err := validate.Struct(c)
+			if err == nil {
+				break
+			}
+			fmt.Println("Error occured")
+		}
+		b := generateBill(c)
+		b.saveDetails("CustomerData")
+		fmt.Println(b)
+	} else if t == "owner" {
+		fmt.Println("Enter customer name to get details")
+		for {
+			fmt.Scan(&name)
+			err := validate.Var(name, "required,min=1,max=12")
+			if err != nil {
+				fmt.Println("Its not a name. Re-enter the name ")
+			} else {
+				break
+			}
+		}
+		search(name)
+	}
+}
+
+func getDetails() customer {
+	var new customer
+	fmt.Println("Enter name")
+	fmt.Scan(&new.Name)
+	fmt.Println("Enter name of fruit")
+	fmt.Scan(&new.Fruit)
+	fmt.Println("Enter quantity")
+	for {
+		_, e := fmt.Scan(&new.Quantity)
+		if e == nil {
+			break
+		}
+		fmt.Println("Enter valid number")
+	}
+	return new
+}
+
+func generateBill(c customer) bill {
+	var b bill
+	if c.Fruit == "apple" {
+		b.Price = c.Quantity * 30
+	} else if c.Fruit == "orange" {
+		b.Price = c.Quantity * 40
+	} else {
+		b.Price = c.Quantity * 50
+	}
+	b.Customer = c
+	return b
+}
+func (b bill) saveDetails(f string) {
+	n := []bill{}
+	by, _ := ioutil.ReadFile(f)
+	json.Unmarshal(by, &n)
+	n = append(n, b)
+	errr := os.Remove(f)
+	if errr != nil {
+		fmt.Println("error in remove", errr)
+	}
+	bs, _ := json.MarshalIndent(n, "", " ")
+	er := ioutil.WriteFile(f, bs, 0777)
+	if er != nil {
+		fmt.Println("Error", er)
+	}
+}
+
+func search(name string) {
+	var n []bill
+	by, err := ioutil.ReadFile("CustomerData")
+	if err != nil {
+		fmt.Println("Error", err)
+	}
+	er := json.Unmarshal(by, &n)
+	if er != nil {
+		fmt.Println("Error", er)
+	}
+	var f int
+	for _, a := range n {
+		if name == a.Customer.Name {
+			fmt.Printf("%+v", a)
+			f = 1
+			break
+		}
+	}
+	if f != 1 {
+		fmt.Println("No customer found")
+	}
+}
