@@ -1,0 +1,56 @@
+package main
+
+import "fmt"
+
+func main() {
+	var n, s, m int
+	ar := make([]int, 0)
+	fmt.Println("Enter array limit")
+	for {
+		_, err := fmt.Scan(&n)
+		if err != nil {
+			fmt.Println("Enter valid number")
+		} else {
+			break
+		}
+	}
+	fmt.Println("Enter number of position to change")
+	for {
+		_, err := fmt.Scan(&s)
+		if err != nil {
+			fmt.Println("Enter valid number")
+		} else {
+			break
+		}
+	}
+	fmt.Println("Enter elements")
+	for i := 0; i < n; i++ {
+		for {
+			_, err := fmt.Scan(&m)
+			if err != nil {
+				fmt.Println("Enter valid number")
+			} else {
+				break
+			}
+		}
+
+		ar = append(ar, m)
+	}
+	fmt.Println("Array before rotation")
+	fmt.Println(ar)
+	fmt.Println("Array after rotated by ", s, " position left")
+	fmt.Println(rotation(ar, s, n))
+
+}
+
+func rotation(ar []int, s, n int) []int {
+	br := make([]int, n)
+	for i := range ar {
+		if i-s < 0 {
+			br[(n-s)+i] = ar[i]
+		} else {
+			br[i-s] = ar[i]
+		}
+	}
+	return br
+}
