@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/go-playground/validator/v10"
+	"github.com/go-playground/validator"
 )
 
 type customer struct {
@@ -35,12 +35,16 @@ func main() {
 	}
 	if t == "customer" {
 		for {
-			c = getDetails()
+			c = getDetails(nil)
 			err := validate.Struct(c)
 			if err == nil {
 				break
 			}
+			fmt.Println(c)
 			fmt.Println("Error occured")
+			var s string
+			fmt.Scanln(&s)
+
 		}
 		b := generateBill(c)
 		b.saveDetails("CustomerData")
@@ -60,20 +64,17 @@ func main() {
 	}
 }
 
-func getDetails() customer {
+func getDetails(in *os.File) customer {
+	if in == nil {
+		in = os.Stdin
+	}
 	var new customer
 	fmt.Println("Enter name")
-	fmt.Scan(&new.Name)
+	fmt.Fscan(in, &new.Name)
 	fmt.Println("Enter name of fruit")
-	fmt.Scan(&new.Fruit)
+	fmt.Fscan(in, &new.Fruit)
 	fmt.Println("Enter quantity")
-	for {
-		_, e := fmt.Scan(&new.Quantity)
-		if e == nil {
-			break
-		}
-		fmt.Println("Enter valid number")
-	}
+	fmt.Fscan(in, &new.Quantity)
 	return new
 }
 
